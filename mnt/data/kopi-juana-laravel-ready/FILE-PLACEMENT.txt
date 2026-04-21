@@ -1,0 +1,15 @@
+Copy these folders into a fresh Laravel project:
+
+- app/
+- database/
+- public/assets/
+- resources/views/
+- routes/web.php
+
+Then run:
+php artisan migrate
+php artisan storage:link
+
+Make sure `.env` has:
+KOPI_ADMIN_PASSWORD=kopijuanatalaadmin
+FILESYSTEM_DISK=public

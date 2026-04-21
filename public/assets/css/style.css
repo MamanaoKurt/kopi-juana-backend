@@ -455,6 +455,44 @@ video {
     color: #7a4c24;
 }
 
+.preview-image {
+    cursor: zoom-in;
+}
+
+.image-preview-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 10, 6, 0.88);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    z-index: 9999;
+}
+
+.image-preview-modal.show {
+    display: flex;
+}
+
+.image-preview-content {
+    max-width: 92vw;
+    max-height: 88vh;
+    object-fit: contain;
+    border-radius: 18px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.image-preview-close {
+    position: absolute;
+    top: 18px;
+    right: 28px;
+    font-size: 46px;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+    font-weight: 700;
+}
+
 @media (max-width: 1100px) {
     .hero-grid,
     .two-col,

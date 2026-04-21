@@ -19,36 +19,46 @@
             @if($galleryImages->count() > 0)
                 @foreach($galleryImages as $image)
                     <div class="gallery-card">
-                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="Kopi Juana gallery image">
+                        <img
+                            src="{{ asset('storage/' . $image->image_path) }}"
+                            alt="Kopi Juana gallery image"
+                            class="preview-image"
+                            onclick="openImagePreview(this.src)"
+                        >
                     </div>
                 @endforeach
             @else
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/storefront-sign.jpg') }}" alt="Kopi Juana storefront sign">
+                    <img src="{{ asset('assets/images/storefront-sign.jpg') }}" alt="Kopi Juana storefront sign" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/interior-main.jpg') }}" alt="Main interior of Kopi Juana">
+                    <img src="{{ asset('assets/images/interior-main.jpg') }}" alt="Main interior of Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/group-photo.jpg') }}" alt="Kopi Juana group photo">
+                    <img src="{{ asset('assets/images/group-photo.jpg') }}" alt="Kopi Juana group photo" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/product-spread.jpg') }}" alt="Kopi Juana drinks and pastries">
+                    <img src="{{ asset('assets/images/product-spread.jpg') }}" alt="Kopi Juana drinks and pastries" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/iced-coffee.jpg') }}" alt="Iced coffee from Kopi Juana">
+                    <img src="{{ asset('assets/images/iced-coffee.jpg') }}" alt="Iced coffee from Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/interior-window.jpg') }}" alt="Window seating at Kopi Juana">
+                    <img src="{{ asset('assets/images/interior-window.jpg') }}" alt="Window seating at Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/interior-shelf.jpg') }}" alt="Shelf and coffee corner at Kopi Juana">
+                    <img src="{{ asset('assets/images/interior-shelf.jpg') }}" alt="Shelf and coffee corner at Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/wall-decor.jpg') }}" alt="Wall decor inside Kopi Juana">
+                    <img src="{{ asset('assets/images/wall-decor.jpg') }}" alt="Wall decor inside Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
             @endif
         </div>
     </div>
 </section>
+
+<div id="imagePreviewModal" class="image-preview-modal" onclick="closeImagePreview()">
+    <span class="image-preview-close" onclick="closeImagePreview(event)">&times;</span>
+    <img id="imagePreviewTarget" class="image-preview-content" src="" alt="Full preview">
+</div>
 @endsection

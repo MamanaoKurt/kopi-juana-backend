@@ -18,16 +18,24 @@
                 </div>
             </a>
 
-            <nav class="nav">
+            <button class="nav-toggle" type="button" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="siteNav">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="nav" id="siteNav">
                 <a href="{{ route('home') }}#about">About</a>
                 <a href="{{ route('home') }}#space">The Space</a>
                 <a href="{{ route('home') }}#specialties">Specialties</a>
                 <a href="{{ route('gallery') }}">Gallery</a>
                 <a href="{{ route('home') }}#contact">Contact</a>
-                <a href="{{ route('visit.facebook') }}" class="btn btn-dark" target="_blank" rel="noopener">Visit Facebook</a>
+                <a href="{{ route('visit.facebook') }}" class="btn btn-dark nav-cta" target="_blank" rel="noopener">Visit Facebook</a>
             </nav>
         </div>
     </header>
+
+    <div class="nav-overlay" id="navOverlay"></div>
 
     @if(session('success'))
         <div class="flash flash-success container">{{ session('success') }}</div>

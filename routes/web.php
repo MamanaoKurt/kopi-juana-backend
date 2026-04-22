@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GalleryController;
 
-Route::get('/', [GalleryController::class, 'index'])->name('home');
+Route::get('/', [GalleryController::class, 'home'])->name('home');
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
 
 Route::get('/admin/gallery', [GalleryController::class, 'admin'])->name('admin.gallery');

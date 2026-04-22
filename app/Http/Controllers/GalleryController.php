@@ -4,43 +4,53 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\GalleryImage;
+use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
-    // FRONT PAGE
+    public function home()
+    {
+        $galleryImages = GalleryImage::latest()->get();
+        return view('home', compact('galleryImages'));
+    }
+
     public function index()
     {
         $galleryImages = GalleryImage::latest()->get();
         return view('gallery', compact('galleryImages'));
     }
 
-    // ADMIN PAGE
     public function admin()
     {
         $galleryImages = GalleryImage::latest()->get();
         return view('admin.gallery', compact('galleryImages'));
     }
 
-    // UPLOAD IMAGE
     public function upload(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|max:2048'
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
         $path = $request->file('image')->store('gallery', 'public');
 
         GalleryImage::create([
-            'image_path' => $path
+            'image_path' => $path,
+            'title' => null,
+            'is_visible' => true,
         ]);
 
-        return redirect()->back()->with('success', 'Image uploaded successfully!');
+        return back()->with('success', 'Image uploaded successfully.');
     }
 
-    // DELETE IMAGE
     public function destroy(GalleryImage $galleryImage)
     {
+        if ($galleryImage->image_path && Storage::disk('public')->exists($galleryImage->image_path)) {
+            Storage::disk('public')->delete($galleryImage->image_path);
+        }
+
         $galleryImage->delete();
-        return redirect()->back();
+
+        return back()->with('success', 'Image deleted successfully.');
     }
 }

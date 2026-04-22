@@ -12,6 +12,12 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div style="margin-bottom: 20px; padding: 12px 16px; background: #fdeaea; color: #8a1f1f; border-radius: 8px;">
+            {{ session('error') }}
+        </div>
+    @endif
+
     @if($errors->any())
         <div style="margin-bottom: 20px; padding: 12px 16px; background: #fdeaea; color: #8a1f1f; border-radius: 8px;">
             @foreach($errors->all() as $error)
@@ -20,25 +26,57 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.gallery.upload') }}" method="POST" enctype="multipart/form-data" style="margin-bottom: 30px;">
-        @csrf
+    @if(!$isAdmin)
+        <form action="{{ route('admin.gallery.login') }}" method="POST" style="margin-bottom: 30px;">
+            @csrf
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter admin password"
+                    required
+                    style="padding: 12px; border: 1px solid #ccc; border-radius: 8px; background: white; min-width: 260px;"
+                >
+                <button
+                    type="submit"
+                    style="padding: 10px 20px; background: #6b3f1d; color: white; border: none; border-radius: 8px; cursor: pointer;"
+                >
+                    Login
+                </button>
+            </div>
+        </form>
+    @else
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom: 20px;">
+            <form action="{{ route('admin.gallery.upload') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                    <input
+                        type="file"
+                        name="image"
+                        required
+                        style="padding: 10px; border: 1px solid #ccc; border-radius: 8px; background: white;"
+                    >
 
-        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-            <input
-                type="file"
-                name="image"
-                required
-                style="padding: 10px; border: 1px solid #ccc; border-radius: 8px; background: white;"
-            >
+                    <button
+                        type="submit"
+                        style="padding: 10px 20px; background: #6b3f1d; color: white; border: none; border-radius: 8px; cursor: pointer;"
+                    >
+                        Upload
+                    </button>
+                </div>
+            </form>
 
-            <button
-                type="submit"
-                style="padding: 10px 20px; background: #6b3f1d; color: white; border: none; border-radius: 8px; cursor: pointer;"
-            >
-                Upload
-            </button>
+            <form action="{{ route('admin.gallery.logout') }}" method="POST">
+                @csrf
+                <button
+                    type="submit"
+                    style="padding: 10px 20px; background: #444; color: white; border: none; border-radius: 8px; cursor: pointer;"
+                >
+                    Logout
+                </button>
+            </form>
         </div>
-    </form>
+    @endif
 
     <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
 
@@ -59,16 +97,18 @@
                     style="width: 100%; height: 220px; object-fit: cover; border-radius: 10px; display: block;"
                 >
 
-                <form action="{{ route('admin.gallery.destroy', $image->id) }}" method="POST" style="margin-top: 12px;">
-                    @csrf
-                    @method('DELETE')
-                    <button
-                        type="submit"
-                        style="width: 100%; padding: 10px; background: #a83232; color: white; border: none; border-radius: 8px; cursor: pointer;"
-                    >
-                        Delete
-                    </button>
-                </form>
+                @if($isAdmin)
+                    <form action="{{ route('admin.gallery.destroy', $image->id) }}" method="POST" style="margin-top: 12px;">
+                        @csrf
+                        @method('DELETE')
+                        <button
+                            type="submit"
+                            style="width: 100%; padding: 10px; background: #a83232; color: white; border: none; border-radius: 8px; cursor: pointer;"
+                        >
+                            Delete
+                        </button>
+                    </form>
+                @endif
             </div>
         @empty
             <p style="color: #666;">No uploaded images yet.</p>

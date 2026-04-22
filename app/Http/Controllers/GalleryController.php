@@ -8,26 +8,54 @@ use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
+    private string $adminPassword = 'Admin123!';
+
     public function home()
     {
-        $galleryImages = GalleryImage::latest()->get();
+        $galleryImages = GalleryImage::where('is_visible', true)->latest()->get();
         return view('home', compact('galleryImages'));
     }
 
     public function index()
     {
-        $galleryImages = GalleryImage::latest()->get();
+        $galleryImages = GalleryImage::where('is_visible', true)->latest()->get();
         return view('gallery', compact('galleryImages'));
     }
 
     public function admin()
     {
         $galleryImages = GalleryImage::latest()->get();
-        return view('admin.gallery', compact('galleryImages'));
+        $isAdmin = session('gallery_admin', false);
+
+        return view('admin.gallery', compact('galleryImages', 'isAdmin'));
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+        if ($request->password === $this->adminPassword) {
+            session(['gallery_admin' => true]);
+            return redirect()->route('admin.gallery')->with('success', 'Admin access granted.');
+        }
+
+        return redirect()->route('admin.gallery')->with('error', 'Wrong password.');
+    }
+
+    public function logout()
+    {
+        session()->forget('gallery_admin');
+        return redirect()->route('admin.gallery')->with('success', 'Logged out.');
     }
 
     public function upload(Request $request)
     {
+        if (!session('gallery_admin')) {
+            abort(403, 'Unauthorized');
+        }
+
         $request->validate([
             'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
@@ -45,7 +73,15 @@ class GalleryController extends Controller
 
     public function destroy(GalleryImage $galleryImage)
     {
-        if ($galleryImage->image_path && Storage::disk('public')->exists($galleryImage->image_path)) {
+        if (!session('gallery_admin')) {
+            abort(403, 'Unauthorized');
+        }
+
+        if (
+            $galleryImage->image_path &&
+            !str_starts_with($galleryImage->image_path, 'assets/') &&
+            Storage::disk('public')->exists($galleryImage->image_path)
+        ) {
             Storage::disk('public')->delete($galleryImage->image_path);
         }
 

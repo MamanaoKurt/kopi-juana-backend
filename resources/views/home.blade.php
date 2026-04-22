@@ -117,34 +117,45 @@
         <div class="gallery-grid">
             @if($galleryImages->count() > 0)
                 @foreach($galleryImages->take(8) as $image)
+                    @php
+                        $src = \Illuminate\Support\Str::startsWith($image->image_path, 'assets/')
+                            ? asset($image->image_path)
+                            : asset('storage/' . $image->image_path);
+                    @endphp
+
                     <div class="gallery-card">
-                        <img src="{{ asset('storage/' . $image->image_path) }}" alt="Kopi Juana gallery image">
+                        <img
+                            src="{{ $src }}"
+                            alt="Kopi Juana gallery image"
+                            class="preview-image"
+                            onclick="openImagePreview(this.src)"
+                        >
                     </div>
                 @endforeach
             @else
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/storefront-sign.jpg') }}" alt="Kopi Juana storefront sign">
+                    <img src="{{ asset('assets/images/storefront-sign.jpg') }}" alt="Kopi Juana storefront sign" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/interior-main.jpg') }}" alt="Main interior of Kopi Juana">
+                    <img src="{{ asset('assets/images/interior-main.jpg') }}" alt="Main interior of Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/group-photo.jpg') }}" alt="Kopi Juana group photo">
+                    <img src="{{ asset('assets/images/group-photo.jpg') }}" alt="Kopi Juana group photo" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/product-spread.jpg') }}" alt="Kopi Juana drinks and pastries">
+                    <img src="{{ asset('assets/images/product-spread.jpg') }}" alt="Kopi Juana drinks and pastries" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/iced-coffee.jpg') }}" alt="Iced coffee from Kopi Juana">
+                    <img src="{{ asset('assets/images/iced-coffee.jpg') }}" alt="Iced coffee from Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/interior-window.jpg') }}" alt="Window seating at Kopi Juana">
+                    <img src="{{ asset('assets/images/interior-window.jpg') }}" alt="Window seating at Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/interior-shelf.jpg') }}" alt="Shelf and coffee corner at Kopi Juana">
+                    <img src="{{ asset('assets/images/interior-shelf.jpg') }}" alt="Shelf and coffee corner at Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
                 <div class="gallery-card">
-                    <img src="{{ asset('assets/images/wall-decor.jpg') }}" alt="Wall decor inside Kopi Juana">
+                    <img src="{{ asset('assets/images/wall-decor.jpg') }}" alt="Wall decor inside Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
                 </div>
             @endif
         </div>
@@ -163,7 +174,7 @@
             <p><strong>Email:</strong> kopijuanacm@gmail.com</p>
             <p><strong>Facebook:</strong> KOPI-JUANA-Tala</p>
             <p><strong>Hours:</strong> 1 PM – 12 MN</p>
-           <a href="{{ route('visit.facebook') }}" class="btn btn-dark" target="_blank" rel="noopener">Visit Facebook</a>
+            <a href="{{ route('visit.facebook') }}" class="btn btn-dark" target="_blank" rel="noopener">Visit Facebook</a>
         </div>
     </div>
 </section>

@@ -2,41 +2,29 @@
 
 @section('content')
 
-<h2>Upload Photo</h2>
+<h1>Admin Gallery Upload</h1>
 
 @if(session('success'))
     <p style="color:green">{{ session('success') }}</p>
 @endif
 
-@if(session('error'))
-    <p style="color:red">{{ session('error') }}</p>
-@endif
-
-<form action="{{ route('admin.gallery.store') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.gallery.upload') }}" method="POST" enctype="multipart/form-data">
     @csrf
-
-    <input type="password" name="password" placeholder="Admin password" required><br><br>
-
-    <input type="text" name="title" placeholder="Title (optional)"><br><br>
-
-    <input type="file" name="image" required><br><br>
-
+    <input type="file" name="image" required>
     <button type="submit">Upload</button>
 </form>
 
 <hr>
 
-<h2>Uploaded Photos</h2>
+<h2>Uploaded Images</h2>
 
-@foreach($galleryImages as $img)
-    <div style="margin-bottom:20px;">
-        <img src="{{ asset('storage/'.$img->image_path) }}" width="200"><br>
+@foreach($galleryImages as $image)
+    <div style="margin-bottom:10px;">
+        <img src="{{ asset('storage/'.$image->image_path) }}" width="150">
 
-        <form action="{{ route('admin.gallery.delete', $img->id) }}" method="POST">
+        <form action="{{ route('admin.gallery.destroy', $image->id) }}" method="POST">
             @csrf
             @method('DELETE')
-
-            <input type="password" name="password" placeholder="Admin password" required>
             <button type="submit">Delete</button>
         </form>
     </div>

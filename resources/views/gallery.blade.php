@@ -16,41 +16,24 @@
         </div>
 
         <div class="gallery-grid">
-            <div class="gallery-card">
-                <img src="{{ asset('assets/images/storefront-sign.jpg') }}" alt="Kopi Juana storefront sign" class="preview-image" onclick="openImagePreview(this.src)">
-            </div>
-            <div class="gallery-card">
-                <img src="{{ asset('assets/images/interior-main.jpg') }}" alt="Main interior of Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
-            </div>
-            <div class="gallery-card">
-                <img src="{{ asset('assets/images/group-photo.jpg') }}" alt="Kopi Juana group photo" class="preview-image" onclick="openImagePreview(this.src)">
-            </div>
-            <div class="gallery-card">
-                <img src="{{ asset('assets/images/product-spread.jpg') }}" alt="Kopi Juana drinks and pastries" class="preview-image" onclick="openImagePreview(this.src)">
-            </div>
-            <div class="gallery-card">
-                <img src="{{ asset('assets/images/iced-coffee.jpg') }}" alt="Iced coffee from Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
-            </div>
-            <div class="gallery-card">
-                <img src="{{ asset('assets/images/interior-window.jpg') }}" alt="Window seating at Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
-            </div>
-            <div class="gallery-card">
-                <img src="{{ asset('assets/images/interior-shelf.jpg') }}" alt="Shelf and coffee corner at Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
-            </div>
-            <div class="gallery-card">
-                <img src="{{ asset('assets/images/wall-decor.jpg') }}" alt="Wall decor inside Kopi Juana" class="preview-image" onclick="openImagePreview(this.src)">
-            </div>
+            @forelse($galleryImages as $image)
+                @php
+                    $src = \Illuminate\Support\Str::startsWith($image->image_path, 'assets/')
+                        ? asset($image->image_path)
+                        : asset('storage/' . $image->image_path);
+                @endphp
 
-            @foreach($galleryImages as $image)
-                @if($image->is_visible)
-                    <div class="gallery-card">
-                        <img src="{{ asset('storage/' . $image->image_path) }}"
-                             alt="Uploaded image"
-                             class="preview-image"
-                             onclick="openImagePreview(this.src)">
-                    </div>
-                @endif
-            @endforeach
+                <div class="gallery-card">
+                    <img
+                        src="{{ $src }}"
+                        alt="Kopi Juana gallery image"
+                        class="preview-image"
+                        onclick="openImagePreview(this.src)"
+                    >
+                </div>
+            @empty
+                <p>No gallery images yet.</p>
+            @endforelse
         </div>
     </div>
 </section>

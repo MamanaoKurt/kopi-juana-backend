@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
     <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 20px; color: #4b2e1f;">
         Admin Gallery Upload
@@ -47,9 +46,15 @@
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
         @forelse($galleryImages as $image)
+            @php
+                $src = \Illuminate\Support\Str::startsWith($image->image_path, 'assets/')
+                    ? asset($image->image_path)
+                    : asset('storage/' . $image->image_path);
+            @endphp
+
             <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.08); padding: 12px;">
                 <img
-                    src="{{ asset('storage/' . $image->image_path) }}"
+                    src="{{ $src }}"
                     alt="Uploaded image"
                     style="width: 100%; height: 220px; object-fit: cover; border-radius: 10px; display: block;"
                 >
@@ -70,5 +75,4 @@
         @endforelse
     </div>
 </div>
-
 @endsection

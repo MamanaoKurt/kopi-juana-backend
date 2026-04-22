@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GalleryImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class GalleryController extends Controller
 {
@@ -60,11 +61,20 @@ class GalleryController extends Controller
             'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ]);
 
-        $path = $request->file('image')->store('gallery', 'public');
+        $file = $request->file('image');
+        $extension = $file->getClientOriginalExtension();
+        $filename = 'gallery/' . Str::uuid() . '.' . $extension;
+
+        Storage::putFileAs(
+            'gallery',
+            $file,
+            basename($filename),
+            ['visibility' => 'public']
+        );
 
         GalleryImage::create([
-            'image_path' => $path,
-            'title' => null,
+            'image_path' => $filename,
+            'title' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
             'is_visible' => true,
         ]);
 
@@ -79,10 +89,9 @@ class GalleryController extends Controller
 
         if (
             $galleryImage->image_path &&
-            !str_starts_with($galleryImage->image_path, 'assets/') &&
-            Storage::disk('public')->exists($galleryImage->image_path)
+            !str_starts_with($galleryImage->image_path, 'assets/')
         ) {
-            Storage::disk('public')->delete($galleryImage->image_path);
+            Storage::delete($galleryImage->image_path);
         }
 
         $galleryImage->delete();

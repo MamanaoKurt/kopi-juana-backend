@@ -120,7 +120,7 @@
                     @php
                         $src = \Illuminate\Support\Str::startsWith($image->image_path, 'assets/')
                             ? asset($image->image_path)
-                            : asset('storage/' . $image->image_path);
+                            : \Illuminate\Support\Facades\Storage::url($image->image_path);
                     @endphp
 
                     <div class="gallery-card">

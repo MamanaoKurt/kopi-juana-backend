@@ -87,7 +87,7 @@
             @php
                 $src = \Illuminate\Support\Str::startsWith($image->image_path, 'assets/')
                     ? asset($image->image_path)
-                    : asset('storage/' . $image->image_path);
+                    : \Illuminate\Support\Facades\Storage::url($image->image_path);
             @endphp
 
             <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.08); padding: 12px;">

@@ -2,35 +2,73 @@
 
 @section('content')
 
-<div style="max-width:900px;margin:40px auto;">
-
-    <h2 style="font-size:28px;font-weight:bold;margin-bottom:20px;">
+<div style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+    <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 20px; color: #4b2e1f;">
         Admin Gallery Upload
     </h2>
 
-    {{-- Upload Form --}}
-    <form action="{{ route('admin.gallery.store') }}" method="POST" enctype="multipart/form-data" style="margin-bottom:30px;">
+    @if(session('success'))
+        <div style="margin-bottom: 20px; padding: 12px 16px; background: #e8f7e8; color: #256029; border-radius: 8px;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div style="margin-bottom: 20px; padding: 12px 16px; background: #fdeaea; color: #8a1f1f; border-radius: 8px;">
+            @foreach($errors->all() as $error)
+                <div>{{ $error }}</div>
+            @endforeach
+        </div>
+    @endif
+
+    <form action="{{ route('admin.gallery.upload') }}" method="POST" enctype="multipart/form-data" style="margin-bottom: 30px;">
         @csrf
 
-        <input type="file" name="image" required
-            style="padding:10px;border:1px solid #ccc;border-radius:6px;">
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <input
+                type="file"
+                name="image"
+                required
+                style="padding: 10px; border: 1px solid #ccc; border-radius: 8px; background: white;"
+            >
 
-        <button type="submit"
-            style="padding:10px 20px;background:#6b3f1d;color:white;border:none;border-radius:6px;">
-            Upload
-        </button>
+            <button
+                type="submit"
+                style="padding: 10px 20px; background: #6b3f1d; color: white; border: none; border-radius: 8px; cursor: pointer;"
+            >
+                Upload
+            </button>
+        </div>
     </form>
 
-    {{-- Uploaded Images --}}
-    <h3 style="margin-bottom:15px;">Uploaded Images</h3>
+    <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
 
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;">
-        @foreach($images as $img)
-            <img src="{{ asset('storage/'.$img->image_path) }}"
-                 style="width:100%;border-radius:10px;">
-        @endforeach
+    <h3 style="margin-bottom: 15px; color: #4b2e1f;">Uploaded Images</h3>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+        @forelse($galleryImages as $image)
+            <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.08); padding: 12px;">
+                <img
+                    src="{{ asset('storage/' . $image->image_path) }}"
+                    alt="Uploaded image"
+                    style="width: 100%; height: 220px; object-fit: cover; border-radius: 10px; display: block;"
+                >
+
+                <form action="{{ route('admin.gallery.destroy', $image->id) }}" method="POST" style="margin-top: 12px;">
+                    @csrf
+                    @method('DELETE')
+                    <button
+                        type="submit"
+                        style="width: 100%; padding: 10px; background: #a83232; color: white; border: none; border-radius: 8px; cursor: pointer;"
+                    >
+                        Delete
+                    </button>
+                </form>
+            </div>
+        @empty
+            <p style="color: #666;">No uploaded images yet.</p>
+        @endforelse
     </div>
-
 </div>
 
 @endsection
